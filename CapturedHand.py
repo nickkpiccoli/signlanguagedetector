@@ -17,18 +17,38 @@ class CapturedHand:
                     self.mp_drawing_styles.get_default_hand_landmarks_style(),
                     self.mp_drawing_styles.get_default_hand_connections_style())
 
-    ##TODO each function return a list of 21 landmarks of x,y,x axis
+    def classificate_hand(self,results):
+        if results.multi_hand_landmarks:
+            # print(results.multi_handedness)
+            hands=[]
+            if len(results.multi_handedness) == 2:
+                hands.append((results.multi_handedness[0].classification[0].index,
+                             results.multi_handedness[0].classification[0].label))
+                hands.append((results.multi_handedness[1].classification[0].index,
+                             results.multi_handedness[1].classification[0].label))
+            else:
+                hands.append((results.multi_handedness[0].classification[0].index,
+                              results.multi_handedness[0].classification[0].label))
+        return hands
 
+    #TODO verify that works also like this
+    def draw_3d_world(self,results):
+        # Draw hand world landmarks.
+        if not results.multi_hand_world_landmarks:
+            pass
+        for hand_world_landmarks in results.multi_hand_world_landmarks:
+            self.mp_drawing.plot_landmarks(
+                hand_world_landmarks, self.mp_hands.HAND_CONNECTIONS, azimuth=5)
+
+    ##TODO each function return a list of 21 landmarks of x,y,x axis
     def get_x_landmarks(self, results):
         landmarks = []
         # checking if landmarks are detected
         if results.multi_hand_landmarks:
+            print(self.classificate_hand(results))
             for hand_landmarks in results.multi_hand_landmarks:
                 for i in range(21):
                     landmarks.append(hand_landmarks.landmark[i].x)
-        else:
-            return landmarks
-
         return landmarks
 
     def get_y_landmarks(self, results):
@@ -38,9 +58,6 @@ class CapturedHand:
             for hand_landmarks in results.multi_hand_landmarks:
                 for i in range(21):
                     landmarks.append(hand_landmarks.landmark[i].y)
-        else:
-            return landmarks
-
         return landmarks
 
     def get_z_landmarks(self, results):
@@ -50,7 +67,4 @@ class CapturedHand:
             for hand_landmarks in results.multi_hand_landmarks:
                 for i in range(21):
                     landmarks.append(hand_landmarks.landmark[i].z)
-        else:
-            return landmarks
-
         return landmarks
