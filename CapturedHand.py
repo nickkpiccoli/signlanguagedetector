@@ -19,7 +19,6 @@ class CapturedHand:
 
     def classificate_hand(self,results):
         if results.multi_hand_landmarks:
-            # print(results.multi_handedness)
             hands=[]
             if len(results.multi_handedness) == 2:
                 hands.append((results.multi_handedness[0].classification[0].index,
@@ -45,10 +44,11 @@ class CapturedHand:
         landmarks = []
         # checking if landmarks are detected
         if results.multi_hand_landmarks:
-            print(self.classificate_hand(results))
             for hand_landmarks in results.multi_hand_landmarks:
+                single_hand = []
                 for i in range(21):
-                    landmarks.append(hand_landmarks.landmark[i].x)
+                    single_hand.append(hand_landmarks.landmark[i].x)
+                landmarks.append(single_hand)
         return landmarks
 
     def get_y_landmarks(self, results):
@@ -56,8 +56,10 @@ class CapturedHand:
         # checking if landmarks are detected
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
+                single_hand = []
                 for i in range(21):
-                    landmarks.append(hand_landmarks.landmark[i].y)
+                    single_hand.append(hand_landmarks.landmark[i].y)
+                landmarks.append(single_hand)
         return landmarks
 
     def get_z_landmarks(self, results):
@@ -65,6 +67,8 @@ class CapturedHand:
         # checking if landmarks are detected
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
+                single_hand = []
                 for i in range(21):
-                    landmarks.append(hand_landmarks.landmark[i].z)
+                    single_hand.append(hand_landmarks.landmark[i].z)
+                landmarks.append(single_hand)
         return landmarks
