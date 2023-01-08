@@ -1,5 +1,7 @@
 import cv2
 from CapturedHand import CapturedHand
+import numpy as np
+
 if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
     tracker = CapturedHand()
@@ -31,12 +33,13 @@ if __name__ == '__main__':
 
         #collecting x,y,z landmarks lists for
 
-        x = tracker.get_x_landmarks(results)
-        y = tracker.get_y_landmarks(results)
-        z = tracker.get_z_landmarks(results)
+        x = np.array(tracker.get_x_landmarks(results))
+        y = np.array(tracker.get_y_landmarks(results))
+        z = np.array(tracker.get_z_landmarks(results))
 
-        tuple = (x,y,z)
-        
+        if(x.shape != (0,)):
+          print(x[0,8])
+
         # Flip the image horizontally for a selfie-view display and show image.
         cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
         if cv2.waitKey(5) & 0xFF == 27:
